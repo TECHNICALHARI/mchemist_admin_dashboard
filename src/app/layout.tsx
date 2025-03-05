@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "../styles/globals.css";
 
 export const metadata: Metadata = {
-  title: "My App",
+  title: "mChemist",
   description: "Dashboard & Login System",
 };
 

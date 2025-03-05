@@ -23,7 +23,6 @@ export default function AppHeader() {
                 <Button variant="ghost">
                     <Moon size={20} />
                 </Button>
-
                 <Menubar>
                     <MenubarMenu>
                         <MenubarTrigger className="outline-none focus:ring-0 focus:outline-none ">
