@@ -10,7 +10,8 @@ import { Form } from "@/components/ui/form";
 import InputField from "@/components/ui/InputField";
 import CheckboxField from "@/components/ui/CheckboxField";
 import Container from "@/components/ui/Container";
-
+import { useRouter } from "next/navigation";
+import { setCookie } from "@/utils/cookieUtils";
 const formSchema = z.object({
   username: z.string().min(2, "Username must be at least 2 characters."),
   password: z.string().min(6, "Password must be at least 6 characters."),
@@ -18,13 +19,16 @@ const formSchema = z.object({
 });
 
 const Login = () => {
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: { username: "", password: "", terms: false },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    router.push("/dashboard")
     console.log(values);
+    await setCookie("token", "hshskjsks")
   };
 
   return (

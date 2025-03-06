@@ -13,28 +13,28 @@ import {
 
 const items = [
   {
-    title: "Home",
-    url: "#",
+    title: "Dashboard",
+    url: "/dashboard",
     icon: Home,
   },
   {
-    title: "Inbox",
-    url: "#",
+    title: "Product",
+    url: "/dashboard/product",
     icon: Inbox,
   },
   {
-    title: "Calendar",
-    url: "#",
+    title: "Category",
+    url: "/dashboard/category",
     icon: Calendar,
   },
   {
-    title: "Search",
-    url: "#",
+    title: "Brand",
+    url: "/dashboard/brand",
     icon: Search,
   },
   {
-    title: "Settings",
-    url: "#",
+    title: "Sub Category",
+    url: "/dashboard/sub-category",
     icon: Settings,
   },
 ]

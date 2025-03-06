@@ -11,17 +11,18 @@ interface SelectFieldProps {
   label: string;
   options: SelectOption[];
   control: any;
+  className?:string;
 }
 
-const SelectField: React.FC<SelectFieldProps> = ({ name, label, options, control }) => (
+const SelectField: React.FC<SelectFieldProps> = ({ name, label, options, control, className }) => (
   <FormField
     control={control}
     name={name}
     render={({ field }) => (
-      <FormItem>
+      <FormItem className={className}>
         <FormLabel>{label}</FormLabel>
         <Select onValueChange={field.onChange} defaultValue={field.value}>
-          <FormControl>
+          <FormControl className="w-full">
             <SelectTrigger>
               <SelectValue placeholder="Select an option" />
             </SelectTrigger>

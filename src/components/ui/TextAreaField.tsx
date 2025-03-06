@@ -1,11 +1,10 @@
-import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Control, FieldValues, Path } from "react-hook-form";
 
-interface InputFieldProps<T extends FieldValues> {
+interface TextAreaFieldProps<T extends FieldValues> {
   name: Path<T>;
   label: string;
-  type?: string;
   placeholder?: string;
   control: Control<T>;
   disabled?: boolean;
@@ -13,16 +12,15 @@ interface InputFieldProps<T extends FieldValues> {
   className?: string;
 }
 
-const InputField = <T extends FieldValues>({
+const TextAreaField = <T extends FieldValues>({
   name,
   label,
-  type = "text",
   placeholder,
   control,
   disabled = false,
   required = false,
   className
-}: InputFieldProps<T>) => (
+}: TextAreaFieldProps<T>) => (
   <FormField
     control={control}
     name={name}
@@ -30,7 +28,7 @@ const InputField = <T extends FieldValues>({
       <FormItem className={className}>
         <FormLabel>{label}</FormLabel>
         <FormControl>
-          <Input {...field} type={type} placeholder={placeholder} disabled={disabled} required={required} />
+          <Textarea {...field} placeholder={placeholder} disabled={disabled} required={required} />
         </FormControl>
         <FormMessage />
       </FormItem>
@@ -38,4 +36,4 @@ const InputField = <T extends FieldValues>({
   />
 );
 
-export default InputField;
+export default TextAreaField;
