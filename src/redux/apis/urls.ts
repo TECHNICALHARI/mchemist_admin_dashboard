@@ -1,0 +1,1 @@
+export const BASE_URL ='https://frontapi.mchemist.in/api/v1';
