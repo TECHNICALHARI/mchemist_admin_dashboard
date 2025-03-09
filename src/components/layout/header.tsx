@@ -1,5 +1,5 @@
-import { Bell, Moon, Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
+"use client"
+import { Bell, Moon} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "../ui/sidebar";
 import {
@@ -11,8 +11,11 @@ import {
     MenubarShortcut,
     MenubarTrigger,
 } from "@/components/ui/menubar"
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux";
 
 export default function AppHeader() {
+    const {isLogin} = useSelector((state: RootState) => state.auth)
     return (
         <header className="bg-white shadow p-4 flex justify-between items-center">
             <SidebarTrigger />

@@ -12,7 +12,10 @@ import Container from "@/components/ui/Container";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux";
-import { setAuthToken } from "@/redux/slices/authSlice";
+import { setAuthToken, setUserData } from "@/redux/slices/authSlice";
+import { useLoginMutation } from "@/redux/apis/authApi";
+import { toast } from "react-toastify";
+import { handleApiError } from "@/utils/common";
 const formSchema = z.object({
   username: z.string().min(2, "Username must be at least 2 characters."),
   password: z.string().min(6, "Password must be at least 6 characters."),
@@ -22,15 +25,26 @@ const formSchema = z.object({
 const Login = () => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>()
-  const {token} = useSelector((state: RootState) => state.auth)
+  const [handleLogin, { isLoading }] = useLoginMutation();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: { username: "", password: "", terms: false },
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    dispatch(setAuthToken("ghssjhsj"))
-    router.push("/dashboard")
+    try {
+      const result = await handleLogin({ email: values.username, password: values.password }).unwrap();
+      console.log(result, "result");
+
+      if (result.success) {
+          toast.success(result.message);
+          dispatch(setAuthToken(result.data.token));
+          dispatch(setUserData(result.data.user));
+          router.push("/dashboard");
+      }
+  } catch (error: any) {
+    handleApiError(error)
+  }
   };
 
   return (
@@ -38,7 +52,7 @@ const Login = () => {
       <div className="h-[100vh] flex items-center justify-center">
         <Card className="w-full max-w-md mx-auto mt-10 shadow-lg">
           <CardHeader>
-            <CardTitle className="text-center text-lg">Login{token}</CardTitle>
+            <CardTitle className="text-center text-lg">Login</CardTitle>
           </CardHeader>
           <CardContent>
             <Form {...form}>
