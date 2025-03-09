@@ -1,5 +1,5 @@
 "use client"
-import { Bell, Moon} from "lucide-react";
+import { Bell, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "../ui/sidebar";
 import {
@@ -8,14 +8,20 @@ import {
     MenubarItem,
     MenubarMenu,
     MenubarSeparator,
-    MenubarShortcut,
     MenubarTrigger,
 } from "@/components/ui/menubar"
-import { useSelector } from "react-redux";
-import { RootState } from "@/redux";
+import { useDispatch} from "react-redux";
+import { AppDispatch} from "@/redux";
+import { handleLogout } from "@/redux/slices/authSlice";
+import { useRouter } from "next/navigation";
 
 export default function AppHeader() {
-    const {isLogin} = useSelector((state: RootState) => state.auth)
+    const dispatch = useDispatch<AppDispatch>();
+    const router = useRouter()
+    const logout = () => {
+        dispatch(handleLogout())
+        router.push("/login")
+    }
     return (
         <header className="bg-white shadow p-4 flex justify-between items-center">
             <SidebarTrigger />
@@ -29,11 +35,11 @@ export default function AppHeader() {
                 <Menubar>
                     <MenubarMenu>
                         <MenubarTrigger className="outline-none focus:ring-0 focus:outline-none ">
-                                <img
-                                    src="https://randomuser.me/api/portraits/women/44.jpg"
-                                    alt="User"
-                                    className="w-8 h-8 rounded-full"
-                                />
+                            <img
+                                src="https://randomuser.me/api/portraits/women/44.jpg"
+                                alt="User"
+                                className="w-8 h-8 rounded-full"
+                            />
                         </MenubarTrigger>
                         <MenubarContent>
                             <MenubarItem>
@@ -41,7 +47,7 @@ export default function AppHeader() {
                             </MenubarItem>
                             <MenubarItem>Setting</MenubarItem>
                             <MenubarSeparator />
-                            <MenubarItem>Logout</MenubarItem>
+                            <MenubarItem onClick={logout}>Logout</MenubarItem>
                         </MenubarContent>
                     </MenubarMenu>
                 </Menubar>

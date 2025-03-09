@@ -1,42 +1,19 @@
-import { getCookie, removeCookie, setCookie } from "@/utils/cookieUtils";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {removeCookie, setCookie } from "@/utils/cookieUtils";
 import { jwtDecode } from "jwt-decode";
 
-interface AuthDataTypes {
+interface UserData {
   name: string;
+}
+
+interface AuthState {
   isLogin: boolean;
-  userData: userDataTypes | null;
+  userData: UserData | null;
 }
 
-const userDataString = typeof window !== "undefined" ? localStorage.getItem("userData") : null;
-let _userData: userDataTypes | null = null;
-let isTokenValid = false;
-
-if (userDataString) {
-  try {
-    _userData = JSON.parse(userDataString);
-  } catch (error) {
-    console.error("Failed to parse user data:", error);
-  }
-}
-
-(async () => {
-  const token = await getCookie("token");
-  if (token) {
-    try {
-      const decodedToken: any = jwtDecode(token);
-      const currentTime = Date.now() / 1000;
-      isTokenValid = decodedToken.exp > currentTime;
-    } catch (error) {
-      console.error("Invalid token:", error);
-    }
-  }
-})();
-
-const initialState: AuthDataTypes = {
-  name: "",
-  isLogin: isTokenValid,
-  userData: _userData,
+const initialState: AuthState = {
+  isLogin: false,
+  userData: null,
 };
 
 const authSlice = createSlice({
@@ -46,30 +23,28 @@ const authSlice = createSlice({
     setAuthToken: (state, action: PayloadAction<string>) => {
       try {
         const decodedToken: any = jwtDecode(action.payload);
-        const expiryTime = decodedToken.exp * 1000;
-        const currentTime = Date.now();
-        const maxAge = Math.max(0, expiryTime - currentTime) / 1000;
-
-        setCookie("token", action.payload, maxAge);
-        state.isLogin = decodedToken.exp > currentTime / 1000;
+        const isTokenValid = decodedToken.exp * 1000 > Date.now();
+        if (isTokenValid) {
+          setCookie("token", action.payload);
+          state.isLogin = true;
+        } else {
+          console.warn("Token expired or invalid.");
+          state.isLogin = false;
+          removeCookie("token");
+        }
       } catch (error) {
-        state.isLogin = false;
         console.error("Invalid token:", error);
+        state.isLogin = false;
+        removeCookie("token");
       }
     },
-    setUserData: (state, action: PayloadAction<AuthDataTypes["userData"]>) => {
+    setUserData: (state, action: PayloadAction<UserData | null>) => {
       state.userData = action.payload;
-      if (action.payload) {
-        localStorage.setItem("userData", JSON.stringify(action.payload));
-      } else {
-        localStorage.removeItem("userData");
-      }
     },
     handleLogout: (state) => {
+      removeCookie("token");
       state.isLogin = false;
       state.userData = null;
-      removeCookie("token");
-      localStorage.removeItem("userData");
     },
   },
 });
