@@ -23,18 +23,8 @@ const items = [
     icon: Inbox,
   },
   {
-    title: "Category",
-    url: "/dashboard/category",
-    icon: Calendar,
-  },
-  {
-    title: "Brand",
-    url: "/dashboard/brand",
-    icon: Search,
-  },
-  {
-    title: "Sub Category",
-    url: "/dashboard/sub-category",
+    title: "Master",
+    url: "/dashboard/master",
     icon: Settings,
   },
 ]

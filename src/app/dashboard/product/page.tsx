@@ -18,7 +18,17 @@ import { z } from 'zod'
 const page = () => {
     const form = useForm<z.infer<typeof productSchema>>({
         resolver: zodResolver(productSchema),
-        defaultValues: { name: "", category: "", subcategory: "", brand: "", description: "", image: [], thumbnail: "" },
+        defaultValues: {
+            name: "",
+            mrp: undefined,
+            saleRate: undefined,
+            category: "",
+            subcategory: "",
+            brand: "",
+            description: "",
+            image: [],
+            thumbnail: ""
+        },
     });
 
     const addProduct = async (values: z.infer<typeof productSchema>) => {
@@ -34,6 +44,8 @@ const page = () => {
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(addProduct)} className='grid grid-cols-2 gap-6'>
                             <InputField name="name" label='Name' placeholder='Name' className='col-span-2' control={form.control} />
+                            <InputField name='mrp' label='mrp' placeholder='Mrp' control={form.control} />
+                            <InputField name='saleRate' label='Sale Rate' placeholder='Sale Rate' control={form.control} />
                             <SelectField name='category' label='Category' options={[]} control={form.control} />
                             <SelectField name='subcategory' label='Sub Category' options={[]} control={form.control} />
                             <SelectField name='brand' label='Brand' options={[]} control={form.control} />
